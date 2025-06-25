@@ -1,11 +1,16 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { CreateCatDTO } from './CreateCatDTO';
+import { CatsService } from './cats.service';
+import { Cat } from './interface/cats.interface';
 
 @Controller('cats')
 export class CatsController {
+    constructor(private catsService: CatsService){};
+
     @Get()
-    findAll(): string {
-        return 'This action returns all cats';
+    findAll(): Cat[] {
+        console.log('findAll called');
+        return this.catsService.findAll();
     }
 
     @Get(':id')
@@ -14,8 +19,9 @@ export class CatsController {
     }
 
     @Post()
-    create(@Body() createCatDTO: CreateCatDTO): string {
-        return `This action adds #${createCatDTO.name}, #${createCatDTO.age}, #${createCatDTO.breed} cat`;
+    create(@Body() createCatDTO: CreateCatDTO): String {
+        this.catsService.create(createCatDTO);
+        return '성공적으로 Create 되었습니다.'
     }
 
     @Put(':id')
