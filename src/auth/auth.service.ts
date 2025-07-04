@@ -2,11 +2,15 @@ import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@n
 import { UserDTO } from './dto/user.dto';
 import { UserService } from './user.service';
 import * as bcrypt from 'bcrypt';
+import { Payload } from './security/payload.interface';
+import { User } from './entity/user.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
     constructor(
-        private userService: UserService
+        private userService: UserService,
+        private jwtService: JwtService
     ){}
 
     async registerUser(newUser: UserDTO): Promise<UserDTO | undefined> {
@@ -19,8 +23,8 @@ export class AuthService {
         return await this.userService.save(newUser);
     }
 
-    async valudateUser(user: UserDTO): Promise<{ message: string; statusCode: number }> {
-        let userFind: UserDTO | null = await this.userService.findByFields({ 
+    async valudateUser(user: UserDTO): Promise<{accessToken: string}> {
+        let userFind: User | null = await this.userService.findByFields({ 
             where: { username: user.username }
         });
         
@@ -33,9 +37,10 @@ export class AuthService {
             throw new UnauthorizedException('password 오류');
         }
 
+        const payload: Payload = { id: userFind.id, username: userFind.username };
+
         return {
-            message: "로그인 성공",
-            statusCode: 200
-        };
+            accessToken: this.jwtService.sign(payload)
+        }
     }
 }

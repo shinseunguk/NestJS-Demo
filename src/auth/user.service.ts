@@ -17,11 +17,9 @@ export class UserService {
     }
 
     async save(userDTO: UserDTO): Promise<User> {
-        const saltRounds = 10;
-        const hashedPassword = await bcrypt.hash(userDTO.password, saltRounds);
-        const userToSave = { ...userDTO, password: hashedPassword };
-        console.log(userToSave);
-        return await this.userRepository.save(userToSave);
+        await this.transformPassword(userDTO)
+        console.log('userDTO => ' + userDTO)
+        return await this.userRepository.save(userDTO);
     }
 
     async transformPassword(user: UserDTO): Promise<void> {
