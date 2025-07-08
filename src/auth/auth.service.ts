@@ -23,7 +23,7 @@ export class AuthService {
         return await this.userService.save(newUser);
     }
 
-    async valudateUser(user: UserDTO): Promise<{accessToken: string}> {
+    async validateUser(user: UserDTO): Promise<{accessToken: string}> {
         let userFind: User | null = await this.userService.findByFields({ 
             where: { username: user.username }
         });
@@ -44,9 +44,20 @@ export class AuthService {
         }
     }
 
-    async tokenValidateUser(payload: Payload): Promise<User | null> {
-        return await this.userService.findByFields({
+    async tokenValidateUser(payload: Payload): Promise<User| null> {
+        const userFind = await this.userService.findByFields({
             where: { id: payload.id }
-        })
+        });
+        this.flatAuthorities(userFind);
+        return userFind;
+    }
+
+    private flatAuthorities(user: any): User {
+        if(user && user.authorities){
+            const authorities: string[] = [];
+            user.authorities.forEach(authority => authorities.push(authority.authorityName));
+            user.authorities = authorities;
+        }
+        return user;
     }
 }
