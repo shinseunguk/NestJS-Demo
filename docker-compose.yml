@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nestjs-app
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USERNAME=ukseung
+      - DB_PASSWORD=flqqka!#%24
+      - DB_DATABASE=TestDB
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    networks:
+      - nestjs-network
+
+  mysql:
+    image: mysql:8
+    container_name: nestjs-mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ukseung
+      MYSQL_PASSWORD: flqqka!#%24
+      MYSQL_DATABASE: TestDB
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - nestjs-network
+
+networks:
+  nestjs-network:
+
+volumes:
+  mysql-data: 

@@ -16,11 +16,11 @@ function ormConfig(): TypeOrmModuleOptions {
 
     const ormconfig: TypeOrmModuleOptions = {
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'ukseung',
-        password: 'flqqka!#%24',
-        database: 'TestDB',
+        host: process.env.DB_HOST || 'localhost',
+        port: parseInt(process.env.DB_PORT || '3306'),
+        username: process.env.DB_USERNAME || 'ukseung',
+        password: process.env.DB_PASSWORD || 'flqqka!#%24',
+        database: process.env.DB_DATABASE || 'TestDB',
         entities: commonConf.ENTITIES,
         synchronize: commonConf.SYNCRONIZE,
         logging: true,

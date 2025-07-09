@@ -1,0 +1,14 @@
+FROM node:20
+
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . ./
+
+EXPOSE ${APP_PORT:-3001}
+
+# 개발 모드로 실행
+CMD ["npm", "run", "start:dev"] 

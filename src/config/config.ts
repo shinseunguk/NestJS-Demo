@@ -32,7 +32,7 @@ export default () => {
     console.error('Config error:', e);
     // 기본 설정 반환
     return {
-      server: { port: 3000 }
+      server: { port: 3001 }
     };
   }
 }
