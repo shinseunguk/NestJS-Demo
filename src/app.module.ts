@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
@@ -10,6 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { ormConfig } from './orm.config';
 import { ConfigModule } from '@nestjs/config';
 import config from './config/config';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -22,7 +23,13 @@ import config from './config/config';
     AuthModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe
+    }
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
