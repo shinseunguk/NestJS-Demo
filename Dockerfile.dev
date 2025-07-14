@@ -8,6 +8,8 @@ RUN npm install
 
 COPY . ./
 
+ENV NODE_ENV=development
+
 EXPOSE ${APP_PORT:-3001}
 
 # 개발 모드로 실행

@@ -1,4 +1,4 @@
-FROM node:23
+FROM node:20
 
 WORKDIR /usr/src/app
 
@@ -8,8 +8,10 @@ RUN npm install
 
 COPY . ./
 
+ENV NODE_ENV=production
+
 RUN npm run build
 
-EXPOSE 3000
+EXPOSE ${APP_PORT:-3001}
 
 CMD ["npm", "run", "start:prod"] 

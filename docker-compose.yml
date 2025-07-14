@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: nestjs-app
     ports:
-      - "3001:3001"
+      - "${APP_PORT:-3001}:${APP_PORT:-3001}"
     depends_on:
       - mysql
     environment:
@@ -16,6 +16,8 @@ services:
       - DB_USERNAME=ukseung
       - DB_PASSWORD=flqqka!#%24
       - DB_DATABASE=TestDB
+      - APP_PORT=${APP_PORT:-3001}
+      - NODE_ENV=production
     volumes:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
@@ -23,11 +25,11 @@ services:
       - nestjs-network
 
   mysql:
-    image: mysql:8
+    image: mysql:8.4.5
     container_name: nestjs-mysql
     restart: always
     ports:
-      - "3306:3306"
+      - "${MYSQL_PORT:-3306}:3306"
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: ukseung
